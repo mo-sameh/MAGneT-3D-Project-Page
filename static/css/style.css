@@ -1,0 +1,461 @@
+/* ==========================================================================
+   MAGneT-3D project page
+   Self-contained: no CDN, no webfonts, no build step.
+   ========================================================================== */
+
+:root {
+  --bg:          #ffffff;
+  --bg-soft:     #fafafa;
+  --rule:        #e4e4e7;
+  --rule-strong: #c9c9ce;
+  --text:        #18181b;
+  --text-soft:   #3f3f46;
+  --text-muted:  #71717a;
+  --link:        #1b4fa8;
+  --link-hover:  #12356f;
+
+  /* Figure legend colours, matching colorgt / colorbaseline / colorours
+     in main.tex so the page and the figures agree. */
+  --c-gt:        #0f8a3c;
+  --c-baseline:  #d97a06;
+  --c-ours:      #1f36c7;
+
+  --measure: 74ch;
+  --page:    1040px;
+
+  --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto,
+          "Helvetica Neue", Arial, sans-serif;
+  --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
+          "Liberation Mono", monospace;
+}
+
+/* Light is the default for every reader, regardless of their OS setting — the
+   page is a document and should look the same as the paper by default. Dark is
+   available on request via the toggle, which stores the choice. */
+:root { color-scheme: light; }
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg:          #101114;
+  --bg-soft:     #17181c;
+  --rule:        #2a2b31;
+  --rule-strong: #3d3e46;
+  --text:        #ececed;
+  --text-soft:   #c4c4c8;
+  --text-muted:  #8e8e97;
+  --link:        #8fb0ee;
+  --link-hover:  #b3c8f5;
+
+  --c-gt:        #4ec97b;
+  --c-baseline:  #f0a13a;
+  --c-ours:      #8fb0ee;
+}
+
+* { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  padding: 0 clamp(1.1rem, 5vw, 2rem) 5rem;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: 17px;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+.page { max-width: var(--page); margin-inline: auto; }
+
+a { color: var(--link); text-underline-offset: 2px; }
+a:hover { color: var(--link-hover); }
+
+sup { font-size: .66em; line-height: 0; vertical-align: super; }
+
+:focus-visible { outline: 2px solid var(--link); outline-offset: 2px; }
+
+.skip-link { position: absolute; left: -9999px; }
+.skip-link:focus {
+  left: 1rem; top: 1rem;
+  background: var(--text); color: var(--bg);
+  padding: .5rem .9rem; border-radius: 4px; z-index: 10;
+}
+
+/* -------------------------------------------------------------- theme toggle */
+
+/* Deliberately quiet: it sits above the title block and out of the reading
+   path. Hidden entirely when there is no scripting to make it work. */
+.theme {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: .9rem;
+  height: 0;                 /* does not push the title block down */
+}
+.theme button {
+  appearance: none;
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  background: var(--bg);
+  color: var(--text-muted);
+  cursor: pointer;
+}
+.theme button:hover { color: var(--text); border-color: var(--rule-strong); }
+.theme svg { width: 15px; height: 15px; }
+.theme .icon-sun { display: none; }
+:root[data-theme="dark"] .theme .icon-sun  { display: block; }
+:root[data-theme="dark"] .theme .icon-moon { display: none; }
+
+/* --------------------------------------------------------------- title block */
+
+.masthead {
+  text-align: center;
+  padding-block: clamp(2.5rem, 6vw, 4rem) 0;
+}
+
+.venue {
+  font-size: .92rem;
+  color: var(--text-muted);
+  margin: 0 0 1.5rem;
+}
+.venue .oral {
+  color: var(--text);
+  font-weight: 600;
+}
+
+h1 {
+  font-size: clamp(1.6rem, 3.6vw, 2.35rem);
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -.02em;
+  margin: 0 auto 1.6rem;
+  max-width: 30ch;
+  text-wrap: balance;
+}
+
+.authors {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: .1rem 1.2rem;
+  margin: 0 0 .9rem;
+  padding: 0;
+  list-style: none;
+  font-size: 1.05rem;
+}
+.authors li { white-space: nowrap; }
+.authors a { color: inherit; text-decoration: none; }
+.authors a:hover { color: var(--link); text-decoration: underline; }
+.authors sup { color: var(--text-muted); }
+
+.orcid {
+  display: inline-block;
+  width: 12px; height: 12px;
+  margin-left: .15em;
+  vertical-align: baseline;
+  opacity: .5;
+}
+.orcid:hover { opacity: 1; }
+.orcid svg { width: 100%; height: 100%; display: block; }
+
+.affiliations {
+  margin: 0 auto;
+  max-width: 72ch;
+  color: var(--text-muted);
+  font-size: .93rem;
+  line-height: 1.85;
+}
+.affiliations span { white-space: nowrap; margin-inline: .3rem; }
+.equal { font-size: .88rem; color: var(--text-muted); margin: .1rem 0 0; }
+
+/* ------------------------------------------------------------------- links */
+
+.links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: .5rem;
+  margin: 2rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+/* Direct children only — the "(soon)" tag is a nested span and must not pick up
+   the button's border and padding. */
+.links > li > a,
+.links > li > span {
+  display: inline-flex;
+  align-items: center;
+  gap: .45rem;
+  padding: .5rem 1.05rem;
+  border-radius: 999px;
+  font-size: .93rem;
+  font-weight: 500;
+  text-decoration: none;
+  border: 1px solid var(--rule-strong);
+}
+.links > li > a {
+  background: var(--text);
+  border-color: var(--text);
+  color: var(--bg);
+}
+.links > li > a:hover { opacity: .85; color: var(--bg); }
+.links > li > span {
+  color: var(--text-muted);
+  border-style: dashed;
+}
+.links .pending { font-size: .82rem; opacity: .75; }
+.links svg { width: 15px; height: 15px; flex: none; }
+
+/* ----------------------------------------------------------------- sections */
+
+section { margin-top: clamp(2.75rem, 6vw, 4rem); }
+
+h2 {
+  font-size: 1.28rem;
+  font-weight: 600;
+  letter-spacing: -.01em;
+  margin: 0 0 1.1rem;
+  padding-bottom: .5rem;
+  border-bottom: 1px solid var(--rule);
+}
+
+p { margin: 0 0 1.1rem; }
+p:last-child { margin-bottom: 0; }
+
+/* Body copy is held to a readable measure and centred, so figures and tables
+   break out past it evenly on both sides. Centring is what makes the narrower
+   column read as deliberate rather than as a short right edge. */
+.prose {
+  max-width: var(--measure);
+  margin-inline: auto;
+}
+.prose p { color: var(--text-soft); }
+.prose strong { color: var(--text); font-weight: 600; }
+
+.abstract p { text-align: justify; hyphens: auto; }
+
+/* ------------------------------------------------------------------ figures */
+
+figure {
+  margin: 0 0 clamp(1.6rem, 4vw, 2.25rem);
+}
+figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: #fff;          /* the figures are drawn on white */
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  padding: .55rem;
+}
+figcaption {
+  margin-top: .7rem;
+  font-size: .9rem;
+  line-height: 1.6;
+  color: var(--text-muted);
+}
+figcaption strong { color: var(--text-soft); font-weight: 600; }
+
+.swatch {
+  display: inline-block;
+  width: .65em; height: .65em;
+  border-radius: 2px;
+  vertical-align: baseline;
+}
+.swatch--gt       { background: var(--c-gt); }
+.swatch--baseline { background: var(--c-baseline); }
+.swatch--ours     { background: var(--c-ours); }
+
+/* ---------------------------------------------------------- table switches */
+
+/* Text switches rather than buttons or pills: they read as part of the caption
+   apparatus of a table, not as an app control. */
+.switch {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: .35rem 1.5rem;
+  margin: 0 0 1rem;
+  font-size: .9rem;
+}
+.switch__label { color: var(--text-muted); }
+.switch__label::after { content: ":"; }
+.switch__set { display: inline-flex; gap: .1rem; margin-left: -.4rem; }
+.switch__set button {
+  appearance: none;
+  border: 0;
+  background: none;
+  font: inherit;
+  color: var(--text-muted);
+  padding: .1rem .4rem;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+}
+.switch__set button:hover { color: var(--text); }
+.switch__set button[aria-selected="true"],
+.switch__set button[aria-pressed="true"] {
+  color: var(--text);
+  font-weight: 600;
+  border-bottom-color: var(--link);
+}
+
+[role="tabpanel"][hidden] { display: none; }
+
+.tnote {
+  margin-top: .75rem;
+  max-width: 100ch;
+  font-size: .9rem;
+  line-height: 1.6;
+  color: var(--text-muted);
+}
+.tnote strong { color: var(--text-soft); font-weight: 600; }
+
+/* ------------------------------------------------------------------- table */
+
+.table-scroll { overflow-x: auto; }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: .88rem;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+caption {
+  caption-side: bottom;
+  margin-top: .75rem;
+  font-size: .9rem;
+  line-height: 1.6;
+  color: var(--text-muted);
+  text-align: left;
+  white-space: normal;
+}
+th, td {
+  padding: .42rem .6rem;
+  text-align: right;
+  border: 0;
+}
+thead th {
+  font-weight: 600;
+  color: var(--text-soft);
+  vertical-align: bottom;
+}
+/* Only the row-label column heads left. The cells in the second header row all
+   carry data-metric, which is what keeps "nuScenes" out of this rule — it is
+   :first-child of its own row but still a numeric column head. */
+thead th:first-child:not([data-metric]) { text-align: left; }
+/* The DRAG / TRIM flag columns hold centred ticks, so centre their heads too. */
+thead th[rowspan]:not(:first-child) { text-align: center; }
+thead tr:first-child th { border-bottom: 1px solid var(--rule); }
+thead tr:last-child th  { border-bottom: 1px solid var(--rule-strong); }
+tbody tr:last-child td,
+tbody tr:last-child th { border-bottom: 1px solid var(--rule-strong); }
+
+th[scope="row"] {
+  text-align: left;
+  font-weight: 400;
+  color: var(--text);
+}
+th.group { text-align: center; font-weight: 600; }
+th.sep, td.sep { padding-left: 1.4rem; }
+
+td.indomain { color: var(--text-muted); }
+td.best     { font-weight: 700; }
+td.check    { text-align: center; }
+td.dash     { text-align: center; color: var(--text-muted); }
+
+tbody tr.ours th[scope="row"] { font-weight: 600; }
+tbody tr.ours td,
+tbody tr.ours th { border-top: 1px solid var(--rule); }
+
+/* ------------------------------------------------------------------ bibtex */
+
+.bibtex {
+  position: relative;
+  background: var(--bg-soft);
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+}
+.bibtex pre {
+  margin: 0;
+  padding: 1.1rem 1.2rem;
+  overflow-x: auto;
+  font-family: var(--mono);
+  font-size: .82rem;
+  line-height: 1.65;
+  color: var(--text-soft);
+}
+.copy {
+  position: absolute;
+  top: .55rem; right: .55rem;
+  padding: .25rem .6rem;
+  font: inherit;
+  font-size: .76rem;
+  color: var(--text-muted);
+  background: var(--bg);
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  cursor: pointer;
+}
+.copy:hover { color: var(--text); border-color: var(--rule-strong); }
+
+/* ------------------------------------------------------------------ footer */
+
+footer {
+  margin-top: clamp(3rem, 7vw, 4.5rem);
+  padding-top: 1.4rem;
+  border-top: 1px solid var(--rule);
+  font-size: .86rem;
+  line-height: 1.65;
+  color: var(--text-muted);
+}
+footer h2 {
+  font-size: .95rem;
+  border: 0;
+  padding: 0;
+  margin-bottom: .5rem;
+  color: var(--text-soft);
+}
+
+@media (max-width: 640px) {
+  body { font-size: 16px; }
+  .authors { font-size: 1rem; gap: .1rem .9rem; }
+  .links a, .links span { flex: 1 1 auto; justify-content: center; }
+  .abstract p { text-align: left; }
+}
+
+@media print {
+  /* Always print light, whatever the reader had on screen. */
+  :root, :root[data-theme="dark"] {
+    color-scheme: light;
+    --bg:          #ffffff;
+    --bg-soft:     #fafafa;
+    --rule:        #e4e4e7;
+    --rule-strong: #c9c9ce;
+    --text:        #18181b;
+    --text-soft:   #3f3f46;
+    --text-muted:  #71717a;
+    --link:        #1b4fa8;
+    --c-gt:        #0f8a3c;
+    --c-baseline:  #d97a06;
+    --c-ours:      #1f36c7;
+  }
+
+  body { padding: 0; }
+  .theme, .copy { display: none; }
+
+  /* A scroll container prints as a clipped box, silently dropping columns. */
+  .table-scroll { overflow: visible; }
+  table { font-size: .78rem; }
+  th, td { padding: .3rem .4rem; }
+
+  figure, section { break-inside: avoid; }
+  h2 { break-after: avoid; }
+  a { color: inherit; text-decoration: none; }
+}

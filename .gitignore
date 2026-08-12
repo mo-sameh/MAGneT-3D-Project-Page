@@ -1,0 +1,20 @@
+# Figure-export tooling. It reads the paper's LaTeX sources directly, so it is
+# kept out of the public repo for now; the exported figures under
+# static/images/ and static/pdf/ are committed.
+tools/
+
+# Paper figures the page does not currently show. They stay on disk so a
+# section can be added back without re-running the exporter, but there is no
+# reason to publish unreleased artwork the page never references.
+static/images/angle_distribution*
+static/images/gt_heatmaps*
+static/images/query_detectors*
+static/images/spatial_distribution*
+static/pdf/angle_distribution.pdf
+static/pdf/gt_heatmaps.pdf
+static/pdf/query_detectors.pdf
+static/pdf/spatial_distribution.pdf
+
+# Local cruft
+.DS_Store
+*.log
